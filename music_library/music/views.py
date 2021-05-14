@@ -31,4 +31,13 @@ class SongDetail(APIView):
         except:
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
- 
+    def put(self, request, song_id):
+        try:
+            song = Song.objects.get(pk=song_id)
+        except:
+            return Response(request.data, status=status.HTTP_400_BAD_REQUEST)
+        serializer = SongSerializer(data=request.data)
+        if serializer.is_valid():
+            song = serializer.update(song, request.data)
+            return Response(SongSerializer(song).data, status=status.HTTP_200_OK)
+
