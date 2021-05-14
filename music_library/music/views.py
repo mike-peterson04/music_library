@@ -50,3 +50,14 @@ class SongDetail(APIView):
         song.delete()
         return Response(deleted_song.data, status=status.HTTP_200_OK)
 
+
+class LikeSong(APIView):
+
+    def put(self,request,song_id):
+        try:
+            song = Song.objects.get(pk=song_id)
+            song.likes += 1
+            song.save()
+            return Response(SongSerializer(song).data, status=status.HTTP_200_OK)
+        except:
+            return Response(request.data, status=status.HTTP_400_BAD_REQUEST)
